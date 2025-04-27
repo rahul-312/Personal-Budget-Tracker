@@ -6,6 +6,8 @@
   padding: 10px 20px;
   background-color: #333;
   color: white;
+  height: 60px; /* Set height for navbar */
+  box-sizing: border-box; /* ensures padding doesn't increase height */
 }
 
 .nav-left ul {
@@ -31,6 +33,7 @@
 
 .nav-right {
   display: flex;
+  align-items: center; /* Center button vertically */
 }
 
 .nav-right button {

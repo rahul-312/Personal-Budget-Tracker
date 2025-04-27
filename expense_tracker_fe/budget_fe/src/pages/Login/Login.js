@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import { API } from "../../api";
 import { Link, useNavigate } from "react-router-dom";
@@ -11,6 +11,8 @@ const Login = () => {
   });
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [displayedText, setDisplayedText] = useState("");
+  const [index, setIndex] = useState(0);
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -21,12 +23,12 @@ const Login = () => {
     e.preventDefault();
     setError("");
     setLoading(true);
-  
+
     const loginData = {
       email: formData.email,
       password: formData.password,
     };
-  
+
     try {
       const response = await axios.post(API.LOGIN, loginData, {
         timeout: 5000,
@@ -34,15 +36,13 @@ const Login = () => {
           'Content-Type': 'application/json',
         },
       });
-  
-      // Log the response to check token presence
+
       console.log("Login Response:", response.data);
-  
-      // Check if tokens are present
+
       if (response.data && response.data.access && response.data.refresh) {
         localStorage.setItem("access_token", response.data.access);
         localStorage.setItem("refresh_token", response.data.refresh);
-  
+
         console.log("Tokens saved to LocalStorage");
         navigate("/dashboard");
       } else {
@@ -65,6 +65,21 @@ const Login = () => {
     return "Good Evening";
   };
 
+  const fullText = `Hello!\n${getGreeting()}`;
+  
+  useEffect(() => {
+    const typingInterval = setInterval(() => {
+      if (index < fullText.length) {
+        setDisplayedText((prev) => prev + fullText.charAt(index));
+        setIndex((prev) => prev + 1);
+      } else {
+        clearInterval(typingInterval);
+      }
+    }, 100);
+
+    return () => clearInterval(typingInterval);
+  }, [index, fullText]);
+
   return (
     <div className="login-page">
       <div className="login-illustration">
@@ -78,7 +93,9 @@ const Login = () => {
       </div>
 
       <div className="login-container">
-        <h1>Hello!<br />{getGreeting()}</h1>
+        <h1 style={{ whiteSpace: 'pre-line' }}>
+          {displayedText}
+        </h1>
         <h2>Login to your account</h2>
         <form onSubmit={handleLogin}>
           <input

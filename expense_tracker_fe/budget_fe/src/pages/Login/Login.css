@@ -2,9 +2,9 @@
 
 .login-page {
   display: flex;
-  height: 65vh;
-  width: 60%;
-  margin: 6rem auto;
+  height: 60vh;
+  width: 50%;
+  margin: 4rem auto;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.05);
   border-radius: 12px;
@@ -92,7 +92,11 @@
   margin-top: 1rem;
 }
 
-.signup-link,
+.signup-link{
+  text-align: center;
+  margin-top: 0rem;
+  font-size: 0.9rem;
+}
 .forgot-password-link {
   text-align: center;
   margin-top: 1rem;

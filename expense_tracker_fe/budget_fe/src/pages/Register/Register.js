@@ -88,7 +88,7 @@ const Register = () => {
       setMessage("");
     }
   };
-  
+
   return (
     <div className="container-wrapper">
       <div className="register-container">
@@ -112,20 +112,6 @@ const Register = () => {
           </div>
 
           <div className="form-row">
-            <select
-              name="gender"
-              value={formData.gender}
-              onChange={handleChange}
-              required
-            >
-              <option value="" disabled>Select Gender</option>
-              <option value="MALE">Male</option>
-              <option value="FEMALE">Female</option>
-              <option value="OTHER">Other</option>
-            </select>
-          </div>
-
-          <div className="form-row">
             <input
               type="text"
               name="first_name"
@@ -145,6 +131,32 @@ const Register = () => {
           </div>
 
           <div className="form-row">
+            <select
+              name="gender"
+              value={formData.gender}
+              onChange={handleChange}
+              required
+            >
+              <option value="" disabled>Select Gender</option>
+              <option value="MALE">Male</option>
+              <option value="FEMALE">Female</option>
+              <option value="OTHER">Other</option>
+            </select>
+
+            <input
+              type="file"
+              name="profile_picture"
+              onChange={handleFileChange}
+              accept="image/jpeg,image/png,image/jpg"
+            />
+            {formData.profile_picture && (
+              <span className="file-name">
+                {formData.profile_picture.name}
+              </span>
+            )}
+          </div>
+
+          <div className="form-row">
             <input
               type="password"
               name="password"
@@ -161,20 +173,6 @@ const Register = () => {
               onChange={handleChange}
               required
             />
-          </div>
-
-          <div className="form-row">
-            <input
-              type="file"
-              name="profile_picture"
-              onChange={handleFileChange}
-              accept="image/jpeg,image/png,image/jpg"
-            />
-            {formData.profile_picture && (
-              <span className="file-name">
-                {formData.profile_picture.name}
-              </span>
-            )}
           </div>
 
           <button type="submit">Register</button>
