@@ -20,4 +20,20 @@
 .dashboard-container p {
   font-size: 1.2rem;
   color: #666;
+  margin-bottom: 2rem; /* Add space between paragraph and button */
+}
+
+.dashboard-button {
+  padding: 12px 24px;
+  background-color: #4CAF50; /* Green button */
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.dashboard-button:hover {
+  background-color: #45a049; /* Darker green on hover */
 }

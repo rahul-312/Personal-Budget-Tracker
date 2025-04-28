@@ -7,6 +7,9 @@ import Login from "./pages/Login/Login";
 import Register from "./pages/Register/Register";
 import Dashboard from "./pages/Dashboard/Dashboard";
 import Profile from "./pages/Profile/Profile";
+import Transactions from "./pages/Transactions/Transactions";
+import History from './pages/History/History';
+
 import "font-awesome/css/font-awesome.min.css";
 
 import "./styles/App.css";
@@ -38,6 +41,8 @@ function MainLayout() {
             <Route path="/register" element={<Register />} />
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/profile" element={<Profile />} />
+            <Route path="/transactions" element={<Transactions />} />
+            <Route path="/history" element={<History />} />
           </Routes>
         </div>
       </div>

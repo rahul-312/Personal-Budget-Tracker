@@ -19,8 +19,12 @@ const Sidebar = () => {
     <div className="sidebar">
       <div className="sidebar-links">
         <ul>
-          <li><Link to="/dashboard">Dashboard</Link></li>
-          {/* Profile link has been removed from here */}
+          <li>
+            <Link to="/dashboard">Dashboard</Link>
+          </li>
+          <li>
+            <Link to="/history">History</Link> {/* 👈 Added History Link */}
+          </li>
         </ul>
       </div>
       <div className="sidebar-logout">
