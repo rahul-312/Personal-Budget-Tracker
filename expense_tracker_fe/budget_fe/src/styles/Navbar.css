@@ -1,13 +1,18 @@
 /* Navbar Styles */
 .nav {
+  position: fixed; /* Stick to the top */
+  top: 0;
+  left: 0;
+  width: 100%; /* Full width */
+  z-index: 1000; /* Stay above everything else */
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 10px 20px;
   background-color: #333;
   color: white;
-  height: 60px; /* Set height for navbar */
-  box-sizing: border-box; /* ensures padding doesn't increase height */
+  height: 60px;
+  box-sizing: border-box;
 }
 
 .nav-left ul {
@@ -27,24 +32,56 @@
   font-size: 1rem;
 }
 
-.nav-left li a:hover {
-  text-decoration: underline;
-}
-
-.nav-right {
-  display: flex;
-  align-items: center; /* Center button vertically */
-}
-
-.nav-right button {
-  padding: 10px 20px;
-  background-color: #4CAF50;
-  color: white;
+/* Style the Dashboard button like a link */
+.nav-left li button {
+  background: none;
   border: none;
-  border-radius: 4px;
+  color: white;
+  font-size: 1rem;
   cursor: pointer;
+  text-decoration: none;
 }
 
-.nav-right button:hover {
-  background-color: #45a049;
+/* Align Profile link to the right */
+.nav-right {
+  margin-left: auto; /* Pushes the items to the right */
+}
+
+.nav-right li {
+  margin-left: 20px; /* Optional: Adds space between items */
+}
+
+.nav-right li a,
+.nav-right li button {
+  color: white;
+  text-decoration: none;
+  font-size: 1rem;
+}
+.nav-right .fa-user {
+  font-size: 1.2rem; /* Adjust the size of the icon */
+}
+
+.nav-right li {
+  list-style: none; /* Also remove any markers here */
+}
+
+/* Optional styling for mobile */
+@media (max-width: 768px) {
+  .nav {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .nav-left ul {
+    flex-direction: column;
+  }
+
+  .nav-left li {
+    margin-right: 0;
+    margin-bottom: 10px;
+  }
+
+  .nav-right {
+    margin-left: 0;
+  }
 }

@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
-import { Link, useNavigate, useLocation } from "react-router-dom"; // Include useNavigate for programmatic navigation
-import "../styles/Navbar.css"; // Ensure this file exists for custom styling
+import { Link, useNavigate, useLocation } from "react-router-dom";
+import "../styles/Navbar.css";
 
 const Navbar = () => {
   const navigate = useNavigate();
@@ -13,12 +13,13 @@ const Navbar = () => {
     setIsAuthenticated(!!refreshToken);
   };
 
-  // Handle logout by clearing tokens and navigating to Home
-  const handleLogout = () => {
-    localStorage.removeItem("access_token");
-    localStorage.removeItem("refresh_token");
-    setIsAuthenticated(false); // Update the state to reflect the logout
-    navigate("/"); // Redirect to the home page
+  // Redirect to login if accessing a protected route without authentication
+  const handleDashboardAccess = () => {
+    if (!isAuthenticated) {
+      navigate("/login"); // Redirect to login if not authenticated
+    } else {
+      navigate("/dashboard"); // Otherwise, navigate to the dashboard
+    }
   };
 
   useEffect(() => {
@@ -38,11 +39,22 @@ const Navbar = () => {
             </>
           ) : (
             <>
-              <li><Link to="/dashboard">Dashboard</Link></li>
-              <li><button onClick={handleLogout}>Logout</button></li> {/* Logout button */}
+              <li><button onClick={handleDashboardAccess}>Dashboard</button></li>
             </>
           )}
         </ul>
+      </div>
+
+      <div className="nav-right">
+        {isAuthenticated && (
+          <ul>
+            <li>
+              <Link to="/profile">
+                <i className="fa fa-user" style={{ marginRight: "8px" }}></i> My Profile
+              </Link>
+            </li>
+          </ul>
+        )}
       </div>
     </nav>
   );

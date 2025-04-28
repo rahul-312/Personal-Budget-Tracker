@@ -13,10 +13,6 @@ const Home = () => {
         <p className="home-note">
           Start by adding your first expense or setting a monthly budget goal to keep your finances under control.
         </p>
-        <div className="home-buttons">
-          <button className="btn primary-btn">Add Expense</button>
-          <button className="btn secondary-btn">View Reports</button>
-        </div>
       </div>
     </div>
   );

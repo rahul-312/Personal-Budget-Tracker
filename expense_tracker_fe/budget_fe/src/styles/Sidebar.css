@@ -1,0 +1,52 @@
+/* Sidebar Styles */
+.sidebar {
+  position: fixed;
+  top: 60px; /* Below the navbar */
+  left: 0;
+  width: 250px;
+  bottom: 60px; /* NEW: Stop the sidebar ABOVE the footer */
+  background-color: #2c3e50;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 20px;
+  box-sizing: border-box;
+  z-index: 999;
+  overflow-y: auto; /* Scroll inside sidebar if content is big */
+}
+/* Sidebar Links */
+.sidebar-links ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.sidebar-links ul li {
+  margin: 20px 0;
+}
+
+.sidebar-links ul li a {
+  color: white;
+  text-decoration: none;
+  font-size: 1rem;
+}
+
+.sidebar-links ul li a:hover {
+  text-decoration: underline;
+}
+
+/* Logout Button */
+.sidebar-logout button {
+  width: 100%;
+  padding: 10px;
+  background-color: #e74c3c; /* Red logout button */
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.sidebar-logout button:hover {
+  background-color: #c0392b;
+}
