@@ -11,6 +11,7 @@ from .views import (
     WeeklyExpenseSummaryAPIView,
     YearlyExpenseSummaryAPIView,
     YearlyStatsAPIView,
+    MonthlyBudgetComparisonAPIView
 )
 
 urlpatterns = [
@@ -24,4 +25,5 @@ urlpatterns = [
     path('expenses/summary/weekly/', WeeklyExpenseSummaryAPIView.as_view(), name='weekly-expense-summary'),
     path('expenses/summary/yearly/', YearlyExpenseSummaryAPIView.as_view(), name='yearly-expense-summary'),
     path('stats/yearly/', YearlyStatsAPIView.as_view(), name='yearly-stats'),
+    path('monthly-budget-comparison/', MonthlyBudgetComparisonAPIView.as_view(), name='monthly-budget-comparison'),
 ]

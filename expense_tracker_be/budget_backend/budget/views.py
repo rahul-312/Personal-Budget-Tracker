@@ -225,3 +225,44 @@ class YearlyStatsAPIView(APIView):
         }
 
         return Response(data)
+
+
+
+class MonthlyBudgetComparisonAPIView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request):
+        # Get the current month and year
+        today = timezone.now()
+        current_month = today.month
+        current_year = today.year
+
+        # Get the user's monthly budget for the current month
+        budget = MonthlyBudget.objects.filter(user=request.user, 
+                                              month=current_month, 
+                                              year=current_year).first()
+
+        if not budget:
+            return Response({"error": "No budget set for this month."}, status=status.HTTP_404_NOT_FOUND)
+
+        # Get actual expenses for the current month
+        thirty_days_ago = today - timedelta(days=30)
+        transactions = Transaction.objects.filter(user=request.user, 
+                                                  transaction_type='expense', 
+                                                  date__gte=thirty_days_ago)
+
+        total_expense = sum(t.amount for t in transactions)
+
+        # Calculate the difference between budgeted and actual expenses
+        difference = total_expense - budget.amount
+
+        # Create a response dictionary
+        comparison = {
+            "month": today.strftime('%B %Y'),
+            "budgeted_amount": budget.amount,
+            "actual_expense": total_expense,
+            "difference": difference,
+            "status": "Under Budget" if difference <= 0 else "Over Budget"
+        }
+
+        return Response(comparison)
