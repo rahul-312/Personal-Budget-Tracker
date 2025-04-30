@@ -238,9 +238,11 @@ class MonthlyBudgetComparisonAPIView(APIView):
         current_year = today.year
 
         # Get the user's monthly budget for the current month
-        budget = MonthlyBudget.objects.filter(user=request.user, 
-                                              month=current_month, 
-                                              year=current_year).first()
+        budget = MonthlyBudget.objects.filter(
+                                    user=request.user,
+                                    month__month=current_month,
+                                    month__year=current_year
+                                ).first()
 
         if not budget:
             return Response({"error": "No budget set for this month."}, status=status.HTTP_404_NOT_FOUND)
