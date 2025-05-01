@@ -165,6 +165,27 @@ export const fetchUserProfile = async () => {
   }
 };
 
+// Update user profile
+export const updateProfile = async (profileData) => {
+  try {
+    const formData = new FormData();
+    for (const key in profileData) {
+      if (profileData[key]) formData.append(key, profileData[key]);
+    }
+
+    const response = await api.post(API.USER_PROFILE, formData, {
+      headers: {
+        ...getAuthHeaders(),
+        "Content-Type": "multipart/form-data",  // Set the header to handle file uploads
+      },
+    });
+
+    return response.data;
+  } catch (error) {
+    console.error('Error updating profile:', error.response || error.message);
+    throw error;
+  }
+};
 // Monthly Budget API functions
 
 // Fetch monthly budget
@@ -237,6 +258,20 @@ export const fetchYearlyExpenseSummary = async () => {
     return response.data;
   } catch (error) {
     console.error('Error fetching yearly expense summary:', error.response || error.message);
+    throw error;
+  }
+};
+
+
+export const fetchWeeklyExpenseSummary = async (startDate, endDate) => {
+  try {
+    const response = await api.get(API.WEEKLY_EXPENSE_SUMMARY, {
+      headers: getAuthHeaders(),
+      params: { start_date: startDate, end_date: endDate }
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching weekly expense summary:', error.response || error.message);
     throw error;
   }
 };
