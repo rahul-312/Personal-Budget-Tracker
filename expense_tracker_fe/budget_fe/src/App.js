@@ -10,14 +10,17 @@ import Register from "./pages/Register/Register";
 import Dashboard from "./pages/Dashboard/Dashboard";
 import Profile from "./pages/Profile/Profile";
 import Transactions from "./pages/Transactions/Transactions";
-import History from './pages/History/History';
-import Budget from "./pages/Budget/Budget";
+import TransactionHistory from "./pages/TransactionHistory/TransactionHistory";
+import MonthlyBudget from "./pages/MonthlyBudget/MonthlyBudget";
 import BudgetComparison from "./pages/BudgetComparison/BudgetComparison";
-import MonthlySummary from "./pages/MonthlySummary/MonthlySummary";
-import WeeklySummary from "./pages/WeeklySummary/WeeklySummary";
+import MonthlyExpenses from "./pages/MonthlyExpenses/MonthlyExpenses";
+import YearlyExpenses from "./pages/YearlyExpenses/YearlyExpenses";
+import MonthlyStats from "./pages/MonthlyStats/MonthlyStats";
 import YearlyStats from "./pages/YearlyStats/YearlyStats";
-import YearlySummary from "./pages/YearlySummary/YearlySummary";
+import EditTransaction from './pages/EditTransaction/EditTransaction';
 
+
+// Styles
 import "font-awesome/css/font-awesome.min.css";
 import "./styles/App.css";
 
@@ -38,13 +41,13 @@ function MainLayout() {
     "/dashboard",
     "/profile",
     "/transactions",
-    "/history",
-    "/budget",
-    "/budget-comparison",
-    "/monthly-summary",
-    "/weekly-summary",
+    "/transaction-history", // Updated the path
+    "/monthly-budget",
+    "/monthly-budget-comparison",
+    "/monthly-expenses",
+    "/yearly-expenses",
+    "/monthly-stats",
     "/yearly-stats",
-    "/yearly-summary",
   ];
 
   const showSidebar = showSidebarRoutes.some(route =>
@@ -64,14 +67,15 @@ function MainLayout() {
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/transactions" element={<Transactions />} />
-            <Route path="/history" element={<History />} />
-            <Route path="/budget" element={<Budget />} />
-            <Route path="/budget-comparison" element={<BudgetComparison />} />
-            <Route path="/monthly-summary" element={<MonthlySummary />} />
-            <Route path="/weekly-summary" element={<WeeklySummary />} />
+            <Route path="/transaction-history" element={<TransactionHistory />} /> {/* Corrected path */}
+            <Route path="/monthly-budget" element={<MonthlyBudget />} />
+            <Route path="/monthly-budget-comparison" element={<BudgetComparison />} />
+            <Route path="/monthly-expenses" element={<MonthlyExpenses />} />
+            <Route path="/yearly-expenses" element={<YearlyExpenses />} />
+            <Route path="/monthly-stats" element={<MonthlyStats />} />
             <Route path="/yearly-stats" element={<YearlyStats />} />
-            <Route path="/yearly-summary" element={<YearlySummary />} />
-            <Route path="*" element={<div>404 - Page Not Found</div>} />
+            <Route path="/transactions/edit/:id" element={<EditTransaction />} />
+            <Route path="*" element={<div>404 - Page Not Found</div>} /> {/* 404 page */}
           </Routes>
         </div>
       </div>

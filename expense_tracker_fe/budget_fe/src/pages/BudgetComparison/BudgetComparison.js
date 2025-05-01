@@ -1,65 +1,100 @@
-import React, { useEffect, useState } from 'react';
-import { fetchMonthlyBudget, fetchMonthlyStats } from "../../api"; // Adjust import if needed
+import React, { useEffect, useState, useRef } from 'react';
+import { fetchMonthlyBudgetComparison } from '../../api';
+import * as d3 from 'd3';
+import './BudgetComparison.css';
 
 const BudgetComparison = () => {
-  const [budget, setBudget] = useState(null);
-  const [stats, setStats] = useState(null);
+  const [comparison, setComparison] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const chartRef = useRef(null);
 
-  useEffect(() => {
-    loadComparisonData();
-  }, []);
-
-  const loadComparisonData = async () => {
+  const loadComparison = async () => {
     try {
-      const budgetData = await fetchMonthlyBudget();
-      const statsData = await fetchMonthlyStats();
-      setBudget(budgetData[0] || null);
-      setStats(statsData);
+      const data = await fetchMonthlyBudgetComparison();
+      setComparison(data);
     } catch (err) {
-      console.error('Error loading comparison data:', err);
+      if (err.response?.status === 404) {
+        setError("No budget set for this month.");
+      } else {
+        setError("Something went wrong while fetching budget comparison.");
+      }
     } finally {
       setLoading(false);
     }
   };
 
-  const getStatus = () => {
-    if (!budget || !stats) return '';
-    const balance = budget.amount - stats.expense;
-    if (balance > 0) return `Under budget by ₹${balance}`;
-    if (balance < 0) return `Over budget by ₹${-balance}`;
-    return 'Exactly on budget';
-  };
+  useEffect(() => {
+    loadComparison();
+  }, []);
 
-  if (loading) return <div>Loading comparison...</div>;
+  useEffect(() => {
+    if (comparison) {
+      // Clear previous chart
+      d3.select(chartRef.current).selectAll("*").remove();
+
+      const data = [
+        { label: "Budgeted", value: comparison.budgeted_amount },
+        { label: "Spent", value: comparison.actual_expense }
+      ];
+
+      const width = 300;
+      const height = 200;
+      const margin = { top: 20, right: 20, bottom: 30, left: 40 };
+
+      const svg = d3.select(chartRef.current)
+        .append("svg")
+        .attr("width", width)
+        .attr("height", height);
+
+      const x = d3.scaleBand()
+        .domain(data.map(d => d.label))
+        .range([margin.left, width - margin.right])
+        .padding(0.4);
+
+      const y = d3.scaleLinear()
+        .domain([0, d3.max(data, d => d.value)])
+        .nice()
+        .range([height - margin.bottom, margin.top]);
+
+      svg.append("g")
+        .selectAll("rect")
+        .data(data)
+        .join("rect")
+        .attr("x", d => x(d.label))
+        .attr("y", d => y(d.value))
+        .attr("height", d => y(0) - y(d.value))
+        .attr("width", x.bandwidth())
+        .attr("fill", "#4caf50");
+
+      svg.append("g")
+        .attr("transform", `translate(0,${height - margin.bottom})`)
+        .call(d3.axisBottom(x));
+
+      svg.append("g")
+        .attr("transform", `translate(${margin.left},0)`)
+        .call(d3.axisLeft(y));
+    }
+  }, [comparison]);
 
   return (
-    <div className="container">
-      <h2>Budget Comparison</h2>
-
-      {budget ? (
-        <div>
-          <p><strong>Month:</strong> {budget.month}</p>
-          <p><strong>Budgeted Amount:</strong> ₹{budget.amount}</p>
-        </div>
+    <div className="budget-comparison-container">
+      <h2>Monthly Budget Comparison</h2>
+      {loading ? (
+        <p>Loading...</p>
+      ) : error ? (
+        <p className="error-text">{error}</p>
       ) : (
-        <p>No monthly budget found.</p>
-      )}
-
-      {stats ? (
-        <div>
-          <p><strong>Total Income:</strong> ₹{stats.income}</p>
-          <p><strong>Total Expenses:</strong> ₹{stats.expense}</p>
-          <p><strong>Savings:</strong> ₹{stats.savings}</p>
-        </div>
-      ) : (
-        <p>No stats found for this month.</p>
-      )}
-
-      {budget && stats && (
-        <div style={{ marginTop: '1rem', fontWeight: 'bold' }}>
-          <p>Status: {getStatus()}</p>
-        </div>
+        <>
+          <div className={`comparison-card ${comparison.status === 'Over Budget' ? 'over' : 'under'}`}>
+            <p><strong>Month:</strong> {comparison.month}</p>
+            <p><strong>Budgeted:</strong> ₹{comparison.budgeted_amount}</p>
+            <p><strong>Spent:</strong> ₹{comparison.actual_expense}</p>
+            <p><strong>Difference:</strong> ₹{comparison.difference}</p>
+            <p><strong>Status:</strong> <span className="status">{comparison.status}</span></p>
+          </div>
+          <div ref={chartRef} className="chart-container"></div>
+        </>
       )}
     </div>
   );

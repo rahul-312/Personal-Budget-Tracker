@@ -1,0 +1,105 @@
+.monthly-budget-container {
+    max-width: 700px;
+    margin: 40px auto;
+    padding: 30px;
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  }
+  
+  .monthly-budget-container h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #333;
+  }
+  
+  .toggle-form-btn {
+    display: block;
+    margin: 10px auto 20px;
+    padding: 10px 20px;
+    background-color: #4caf50;
+    border: none;
+    border-radius: 6px;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+  }
+  
+  .toggle-form-btn:hover {
+    background-color: #45a049;
+  }
+  
+  .create-budget-form {
+    margin-bottom: 30px;
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 8px;
+  }
+  
+  .form-group {
+    margin-bottom: 15px;
+  }
+  
+  .form-group label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 6px;
+    color: #444;
+  }
+  
+  .form-group input {
+    width: 100%;
+    padding: 8px 10px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 15px;
+  }
+  
+  .submit-budget-btn {
+    background-color: #2196f3;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+  }
+  
+  .submit-budget-btn:hover {
+    background-color: #1976d2;
+  }
+  
+  .budget-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+  }
+  
+  .budget-table th,
+  .budget-table td {
+    border: 1px solid #ddd;
+    padding: 12px;
+    text-align: center;
+  }
+  
+  .budget-table th {
+    background-color: #f2f2f2;
+    color: #333;
+  }
+  
+  .budget-table tr:nth-child(even) {
+    background-color: #fafafa;
+  }
+  
+  .budget-table tr:hover {
+    background-color: #f1f1f1;
+  }
+  
+  p {
+    text-align: center;
+    font-size: 16px;
+    color: #666;
+  }
+  
