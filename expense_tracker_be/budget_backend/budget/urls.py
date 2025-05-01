@@ -1,4 +1,3 @@
-# urls.py
 from django.urls import path
 from .views import (
     TransactionListCreateAPIView,
@@ -6,11 +5,8 @@ from .views import (
     UserProfileAPIView,
     MonthlyBudgetListCreateAPIView,
     MonthlyBudgetDetailAPIView,
-    MonthlyExpenseSummaryAPIView,
-    MonthlyStatsAPIView,
-    WeeklyExpenseSummaryAPIView,
-    YearlyExpenseSummaryAPIView,
-    YearlyStatsAPIView,
+    ExpenseSummaryAPIView,
+    FinancialStatsAPIView,
     MonthlyBudgetComparisonAPIView
 )
 
@@ -20,10 +16,7 @@ urlpatterns = [
     path('profile/', UserProfileAPIView.as_view(), name='user-profile'),
     path('monthly-budgets/', MonthlyBudgetListCreateAPIView.as_view(), name='monthly-budget-list-create'),
     path('monthly-budgets/<int:pk>/', MonthlyBudgetDetailAPIView.as_view(), name='monthly-budget-detail'),
-    path('expenses/summary/monthly/', MonthlyExpenseSummaryAPIView.as_view(), name='monthly-expense-summary'),
-    path('stats/monthly/', MonthlyStatsAPIView.as_view(), name='monthly-stats'),
-    path('expenses/summary/weekly/', WeeklyExpenseSummaryAPIView.as_view(), name='weekly-expense-summary'),
-    path('expenses/summary/yearly/', YearlyExpenseSummaryAPIView.as_view(), name='yearly-expense-summary'),
-    path('stats/yearly/', YearlyStatsAPIView.as_view(), name='yearly-stats'),
+    path('expenses/summary/', ExpenseSummaryAPIView.as_view(), name='expense-summary'),
+    path('stats/', FinancialStatsAPIView.as_view(), name='financial-stats'),
     path('monthly-budget-comparison/', MonthlyBudgetComparisonAPIView.as_view(), name='monthly-budget-comparison'),
 ]

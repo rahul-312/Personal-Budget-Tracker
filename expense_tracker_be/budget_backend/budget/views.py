@@ -123,148 +123,104 @@ class MonthlyBudgetDetailAPIView(APIView):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
-# --------- Additional Views ---------
-
-class MonthlyExpenseSummaryAPIView(APIView):
+class ExpenseSummaryAPIView(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def get(self, request):
+        period = request.query_params.get('period', 'monthly')  # 'weekly', 'monthly', 'yearly'
         today = timezone.now()
-        thirty_days_ago = today - timedelta(days=30)
-        transactions = Transaction.objects.filter(user=request.user, transaction_type='expense', date__gte=thirty_days_ago)
+
+        days_map = {
+            'weekly': 7,
+            'monthly': 30,
+            'yearly': 365,
+        }
+
+        days = days_map.get(period, 30)
+        start_date = today - timedelta(days=days)
+
+        transactions = Transaction.objects.filter(
+            user=request.user,
+            transaction_type='expense',
+            date__gte=start_date
+        )
 
         summary = {}
         for transaction in transactions:
             category = transaction.category
-            amount = transaction.amount
-            if category in summary:
-                summary[category] += amount
-            else:
-                summary[category] = amount
+            summary[category] = summary.get(category, 0) + transaction.amount
 
-        return Response(summary)
+        return Response({
+            "period": period,
+            "start_date": start_date.date(),
+            "end_date": today.date(),
+            "summary": summary
+        })
 
 
-class MonthlyStatsAPIView(APIView):
+class FinancialStatsAPIView(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def get(self, request):
+        period = request.query_params.get('period', 'monthly')  # 'weekly', 'monthly', 'yearly'
         today = timezone.now()
-        thirty_days_ago = today - timedelta(days=30)
-        transactions = Transaction.objects.filter(user=request.user, date__gte=thirty_days_ago)
+
+        days_map = {
+            'weekly': 7,
+            'monthly': 30,
+            'yearly': 365,
+        }
+
+        days = days_map.get(period, 30)
+        start_date = today - timedelta(days=days)
+
+        transactions = Transaction.objects.filter(user=request.user, date__gte=start_date)
 
         total_income = sum(t.amount for t in transactions if t.transaction_type == 'income')
         total_expense = sum(t.amount for t in transactions if t.transaction_type == 'expense')
         savings = total_income - total_expense
 
-        data = {
-            'total_income': total_income,
-            'total_expense': total_expense,
-            'savings': savings,
-        }
-
-        return Response(data)
-
-
-class WeeklyExpenseSummaryAPIView(APIView):
-    permission_classes = [permissions.IsAuthenticated]
-
-    def get(self, request):
-        today = timezone.now()
-        seven_days_ago = today - timedelta(days=7)
-        transactions = Transaction.objects.filter(user=request.user, transaction_type='expense', date__gte=seven_days_ago)
-
-        summary = {}
-        for transaction in transactions:
-            category = transaction.category
-            amount = transaction.amount
-            if category in summary:
-                summary[category] += amount
-            else:
-                summary[category] = amount
-
-        return Response(summary)
-
-
-class YearlyExpenseSummaryAPIView(APIView):
-    permission_classes = [permissions.IsAuthenticated]
-
-    def get(self, request):
-        today = timezone.now()
-        one_year_ago = today - timedelta(days=365)
-        transactions = Transaction.objects.filter(user=request.user, transaction_type='expense', date__gte=one_year_ago)
-
-        summary = {}
-        for transaction in transactions:
-            category = transaction.category
-            amount = transaction.amount
-            if category in summary:
-                summary[category] += amount
-            else:
-                summary[category] = amount
-
-        return Response(summary)
-
-
-class YearlyStatsAPIView(APIView):
-    permission_classes = [permissions.IsAuthenticated]
-
-    def get(self, request):
-        today = timezone.now()
-        one_year_ago = today - timedelta(days=365)
-        transactions = Transaction.objects.filter(user=request.user, date__gte=one_year_ago)
-
-        total_income = sum(t.amount for t in transactions if t.transaction_type == 'income')
-        total_expense = sum(t.amount for t in transactions if t.transaction_type == 'expense')
-        savings = total_income - total_expense
-
-        data = {
-            'total_income': total_income,
-            'total_expense': total_expense,
-            'savings': savings,
-        }
-
-        return Response(data)
-
-
+        return Response({
+            "period": period,
+            "start_date": start_date.date(),
+            "end_date": today.date(),
+            "total_income": total_income,
+            "total_expense": total_expense,
+            "savings": savings
+        })
 
 class MonthlyBudgetComparisonAPIView(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def get(self, request):
-        # Get the current month and year
         today = timezone.now()
         current_month = today.month
         current_year = today.year
 
-        # Get the user's monthly budget for the current month
         budget = MonthlyBudget.objects.filter(
-                                    user=request.user,
-                                    month__month=current_month,
-                                    month__year=current_year
-                                ).first()
+            user=request.user,
+            month__month=current_month,
+            month__year=current_year
+        ).first()
 
         if not budget:
             return Response({"error": "No budget set for this month."}, status=status.HTTP_404_NOT_FOUND)
 
-        # Get actual expenses for the current month
-        thirty_days_ago = today - timedelta(days=30)
-        transactions = Transaction.objects.filter(user=request.user, 
-                                                  transaction_type='expense', 
-                                                  date__gte=thirty_days_ago)
+        start_date = today.replace(day=1)
+        transactions = Transaction.objects.filter(
+            user=request.user,
+            transaction_type='expense',
+            date__gte=start_date,
+            date__lte=today
+        )
 
         total_expense = sum(t.amount for t in transactions)
+        difference = budget.budget_amount - total_expense
 
-        # Calculate the difference between budgeted and actual expenses
-        difference = total_expense - budget.amount
-
-        # Create a response dictionary
-        comparison = {
+        return Response({
             "month": today.strftime('%B %Y'),
-            "budgeted_amount": budget.amount,
+            "budgeted_amount": budget.budget_amount,
             "actual_expense": total_expense,
             "difference": difference,
             "status": "Under Budget" if difference <= 0 else "Over Budget"
-        }
-
-        return Response(comparison)
+        })
