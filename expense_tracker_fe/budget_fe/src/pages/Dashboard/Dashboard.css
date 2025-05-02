@@ -1,39 +1,106 @@
 /* src/pages/Dashboard/Dashboard.css */
+
 .dashboard-container {
-  padding: 2rem;
-  padding-top: 7rem; /* Space for the fixed navbar */
-  padding-bottom: 60px; /* Space for the fixed footer */
-  text-align: center;
-  background-color: #ffffff;
-  min-height: calc(100vh - 60px); /* Adjust for the height of the footer */
+  margin-left: 250px; /* Adjust for the sidebar width */
+  padding: 80px 20px 80px 20px;
+  min-height: calc(100vh - 120px); /* Make sure it's not covered by footer */
   box-sizing: border-box;
-  margin-left: 250px; /* Adjust for Sidebar width */
-  margin-right: 20px; /* Add some space on the right side */
+  background-color: #ecf0f1;
+  color: #2c3e50;
 }
 
-.dashboard-container h1 {
-  font-size: 2.5rem;
-  color: #333;
-  margin-bottom: 1rem;
+.dashboard-container h2 {
+  font-size: 2rem;
+  margin-bottom: 20px;
+  color: #2c3e50;
 }
 
-.dashboard-container p {
+.dashboard-container h3 {
+  font-size: 1.5rem;
+  margin-bottom: 15px;
+  color: #34495e;
+}
+
+.dashboard-container .summary-cards {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 40px;
   font-size: 1.2rem;
-  color: #666;
-  margin-bottom: 2rem; /* Add space between paragraph and button */
+  background-color: #fff;
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.dashboard-container .summary-cards div {
+  font-weight: bold;
+}
+
+.dashboard-container .summary-cards div:nth-child(1) {
+  color: #2ecc71;
+}
+
+.dashboard-container .summary-cards div:nth-child(2) {
+  color: #e74c3c;
+}
+
+.dashboard-container .summary-cards div:nth-child(3) {
+  color: #f39c12;
+}
+
+.chart-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px 0; /* Ensures there's padding around the chart */
+}
+
+.dashboard-container ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.dashboard-container ul li {
+  font-size: 1rem;
+  margin-bottom: 10px;
+  background-color: #fff;
+  padding: 10px;
+  border-radius: 6px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
 .dashboard-button {
-  padding: 12px 24px;
-  background-color: #4CAF50; /* Green button */
+  background-color: #3498db;
   color: white;
+  padding: 12px 20px;
   border: none;
-  border-radius: 8px;
-  font-size: 1.1rem;
+  border-radius: 6px;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  font-size: 1rem;
+  margin-top: 30px;
 }
 
 .dashboard-button:hover {
-  background-color: #45a049; /* Darker green on hover */
+  background-color: #2980b9;
+}
+
+.dashboard-container svg {
+  width: 100%;
+  height: auto;
+  margin-top: 30px;
+}
+
+.dashboard-container .pie-chart-wrapper {
+  width: 300px;
+  height: 300px;
+  margin: 0 auto;
+}
+
+.dashboard-container .bar-chart-wrapper {
+  width: 100%;
+  max-width: 600px;
+  margin: 40px auto;
 }

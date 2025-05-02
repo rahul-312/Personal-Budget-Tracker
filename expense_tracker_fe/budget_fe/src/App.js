@@ -19,7 +19,6 @@ import MonthlyStats from "./pages/MonthlyStats/MonthlyStats";
 import YearlyStats from "./pages/YearlyStats/YearlyStats";
 import EditTransaction from './pages/EditTransaction/EditTransaction';
 
-
 // Styles
 import "font-awesome/css/font-awesome.min.css";
 import "./styles/App.css";
@@ -41,13 +40,12 @@ function MainLayout() {
     "/dashboard",
     "/profile",
     "/transactions",
-    "/transaction-history", // Updated the path
+    "/transaction-history",
     "/monthly-budget",
     "/monthly-budget-comparison",
-    "/monthly-expenses",
-    "/yearly-expenses",
-    "/monthly-stats",
-    "/yearly-stats",
+    "/expense-summary",
+    "/stats/monthly",
+    "/stats/yearly",
   ];
 
   const showSidebar = showSidebarRoutes.some(route =>
@@ -67,15 +65,15 @@ function MainLayout() {
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/transactions" element={<Transactions />} />
-            <Route path="/transaction-history" element={<TransactionHistory />} /> {/* Corrected path */}
+            <Route path="/transaction-history" element={<TransactionHistory />} />
             <Route path="/monthly-budget" element={<MonthlyBudget />} />
             <Route path="/monthly-budget-comparison" element={<BudgetComparison />} />
-            <Route path="/monthly-expenses" element={<MonthlyExpenses />} />
-            <Route path="/yearly-expenses" element={<YearlyExpenses />} />
-            <Route path="/monthly-stats" element={<MonthlyStats />} />
-            <Route path="/yearly-stats" element={<YearlyStats />} />
+            <Route path="/expense-summary/monthly" element={<MonthlyExpenses />} />  {/* Monthly Expenses Route */}
+            <Route path="/expense-summary/yearly" element={<YearlyExpenses />} />    {/* Yearly Expenses Route */}
+            <Route path="/stats/monthly" element={<MonthlyStats />} />
+            <Route path="/stats/yearly" element={<YearlyStats />} />
             <Route path="/transactions/edit/:id" element={<EditTransaction />} />
-            <Route path="*" element={<div>404 - Page Not Found</div>} /> {/* 404 page */}
+            <Route path="*" element={<div>404 - Page Not Found</div>} />
           </Routes>
         </div>
       </div>

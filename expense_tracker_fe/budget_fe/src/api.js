@@ -40,7 +40,7 @@ const api = axios.create({
   },
 });
 
-// Function to retrieve authentication headers
+// Authentication headers
 export const getAuthHeaders = () => {
   const accessToken = localStorage.getItem('access_token');
   if (!accessToken) {
@@ -51,9 +51,8 @@ export const getAuthHeaders = () => {
   };
 };
 
-// Authentication Functions
+// Authentication
 
-// Register a new user
 export const register = async (userData) => {
   try {
     const response = await api.post(API.REGISTER, userData);
@@ -64,7 +63,6 @@ export const register = async (userData) => {
   }
 };
 
-// Log in a user
 export const login = async (credentials) => {
   try {
     const response = await api.post(API.LOGIN, credentials);
@@ -81,7 +79,6 @@ export const login = async (credentials) => {
   }
 };
 
-// Log out a user
 export const logout = async () => {
   try {
     const refreshToken = localStorage.getItem('refresh_token');
@@ -102,9 +99,8 @@ export const logout = async () => {
   }
 };
 
-// Transaction Functions
+// Transactions
 
-// Fetch all transactions
 export const fetchTransactions = async () => {
   try {
     const response = await api.get(API.TRANSACTIONS, {
@@ -117,7 +113,6 @@ export const fetchTransactions = async () => {
   }
 };
 
-// Create a new transaction
 export const createTransaction = async (transactionData) => {
   try {
     const response = await api.post(API.TRANSACTIONS, transactionData, {
@@ -130,7 +125,6 @@ export const createTransaction = async (transactionData) => {
   }
 };
 
-// Fetch transaction details by ID
 export const fetchTransactionDetail = async (id) => {
   try {
     const response = await api.get(API.TRANSACTION_DETAIL(id), {
@@ -143,7 +137,6 @@ export const fetchTransactionDetail = async (id) => {
   }
 };
 
-// Update a transaction by ID
 export const updateTransaction = async (id, transactionData) => {
   try {
     const response = await api.put(API.TRANSACTION_DETAIL(id), transactionData, {
@@ -156,7 +149,6 @@ export const updateTransaction = async (id, transactionData) => {
   }
 };
 
-// Delete a transaction by ID
 export const deleteTransaction = async (id) => {
   try {
     const response = await api.delete(API.TRANSACTION_DETAIL(id), {
@@ -169,10 +161,8 @@ export const deleteTransaction = async (id) => {
   }
 };
 
+// User Profile
 
-// User Profile Functions
-
-// Fetch user profile
 export const fetchUserProfile = async () => {
   try {
     const response = await api.get(API.USER_PROFILE, {
@@ -185,7 +175,6 @@ export const fetchUserProfile = async () => {
   }
 };
 
-// Update user profile
 export const updateProfile = async (profileData) => {
   try {
     const formData = new FormData();
@@ -207,9 +196,8 @@ export const updateProfile = async (profileData) => {
   }
 };
 
-// Monthly Budget Functions
+// Monthly Budgets
 
-// Fetch monthly budgets
 export const fetchMonthlyBudget = async () => {
   try {
     const response = await api.get(API.MONTHLY_BUDGET, {
@@ -222,7 +210,6 @@ export const fetchMonthlyBudget = async () => {
   }
 };
 
-// Create a new monthly budget
 export const createMonthlyBudget = async (budgetData) => {
   try {
     const response = await api.post(API.MONTHLY_BUDGET, budgetData, {
@@ -235,7 +222,6 @@ export const createMonthlyBudget = async (budgetData) => {
   }
 };
 
-// Update a monthly budget by ID
 export const updateMonthlyBudget = async (id, budgetData) => {
   try {
     const response = await api.put(API.MONTHLY_BUDGET_DETAIL(id), budgetData, {
@@ -248,7 +234,6 @@ export const updateMonthlyBudget = async (id, budgetData) => {
   }
 };
 
-// Delete a monthly budget by ID
 export const deleteMonthlyBudget = async (id) => {
   try {
     const response = await api.delete(API.MONTHLY_BUDGET_DETAIL(id), {
@@ -261,41 +246,44 @@ export const deleteMonthlyBudget = async (id) => {
   }
 };
 
-// Financial Statistics Functions
+// Financial Statistics
 
-// Fetch financial statistics (monthly or yearly)
-export const fetchFinancialStats = async (type = 'monthly') => {
+export const fetchFinancialStats = async (period = 'monthly') => {
   try {
+    // Adjust the parameter name from `type` to `period`
     const response = await api.get(API.STATS, {
       headers: getAuthHeaders(),
-      params: { type },
+      params: { period },  // Update the key to 'period'
     });
     return response.data;
   } catch (error) {
-    console.error(`Error fetching ${type} financial stats:`, error.response || error.message);
+    console.error(`Error fetching ${period} financial stats:`, error.response || error.message);
     throw error;
   }
 };
 
-// Expense Summary Functions
+// Expense Summary
 
-// Fetch expense summary (monthly, weekly, or yearly)
-export const fetchExpenseSummary = async (type = 'monthly', params = {}) => {
+export const fetchExpenseSummary = async (period = 'monthly', params = {}) => {
   try {
     const response = await api.get(API.EXPENSE_SUMMARY, {
       headers: getAuthHeaders(),
-      params: { type, ...params },
+      params: { period, ...params },
     });
     return response.data;
   } catch (error) {
-    console.error(`Error fetching ${type} expense summary:`, error.response || error.message);
+    console.error(`Error fetching ${period} expense summary:`, error.response || error.message);
     throw error;
   }
 };
 
-// Monthly Budget Comparison Function
+// Specific function for Monthly Expense Summary
+export const fetchMonthlyExpenses = async () => {
+  return fetchExpenseSummary('monthly');
+};
 
-// Fetch monthly budget comparison
+// Monthly Budget Comparison
+
 export const fetchMonthlyBudgetComparison = async () => {
   try {
     const response = await api.get(API.MONTHLY_BUDGET_COMPARISON, {

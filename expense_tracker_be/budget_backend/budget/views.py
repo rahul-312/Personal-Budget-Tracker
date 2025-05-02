@@ -130,14 +130,18 @@ class ExpenseSummaryAPIView(APIView):
         period = request.query_params.get('period', 'monthly')  # 'weekly', 'monthly', 'yearly'
         today = timezone.now()
 
+        # Adjusting the number of days based on the selected period
         days_map = {
             'weekly': 7,
             'monthly': 30,
             'yearly': 365,
         }
 
-        days = days_map.get(period, 30)
-        start_date = today - timedelta(days=days)
+        if period == 'yearly':
+            start_date = today.replace(year=today.year - 1)
+        else:
+            days = days_map.get(period, 30)
+            start_date = today - timedelta(days=days)
 
         transactions = Transaction.objects.filter(
             user=request.user,

@@ -88,7 +88,6 @@ const TransactionHistory = () => {
         <thead style={{ backgroundColor: '#f2f2f2' }}>
           <tr>
             <th>Date</th>
-            <th>Description</th>
             <th>Amount</th>
             <th>Category</th>
             <th>Actions</th>
@@ -98,7 +97,6 @@ const TransactionHistory = () => {
           {transactions.map((transaction) => (
             <tr key={transaction.id}>
               <td>{transaction.date}</td>
-              <td>{transaction.description}</td>
               <td>{transaction.amount}</td>
               <td>{transaction.category}</td>
               <td>

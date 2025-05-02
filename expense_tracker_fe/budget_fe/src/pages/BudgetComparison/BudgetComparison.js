@@ -30,50 +30,69 @@ const BudgetComparison = () => {
 
   useEffect(() => {
     if (comparison) {
-      // Clear previous chart
       d3.select(chartRef.current).selectAll("*").remove();
-
+  
       const data = [
-        { label: "Budgeted", value: comparison.budgeted_amount },
-        { label: "Spent", value: comparison.actual_expense }
+        { label: "Budgeted", value: comparison.budgeted_amount, color: "#2196f3" },
+        { label: "Spent", value: comparison.actual_expense, color: "#f44336" }
       ];
-
-      const width = 300;
-      const height = 200;
-      const margin = { top: 20, right: 20, bottom: 30, left: 40 };
-
+  
+      const width = 400;
+      const height = 250;
+      const margin = { top: 30, right: 20, bottom: 40, left: 60 };
+  
       const svg = d3.select(chartRef.current)
         .append("svg")
         .attr("width", width)
         .attr("height", height);
-
+  
       const x = d3.scaleBand()
         .domain(data.map(d => d.label))
         .range([margin.left, width - margin.right])
         .padding(0.4);
-
+  
       const y = d3.scaleLinear()
-        .domain([0, d3.max(data, d => d.value)])
+        .domain([0, d3.max(data, d => d.value) * 1.2])
         .nice()
         .range([height - margin.bottom, margin.top]);
-
+  
+      // Bars
       svg.append("g")
         .selectAll("rect")
         .data(data)
         .join("rect")
         .attr("x", d => x(d.label))
+        .attr("y", y(0))
+        .attr("height", 0)
+        .attr("width", x.bandwidth())
+        .attr("fill", d => d.color)
+        .transition()
+        .duration(800)
         .attr("y", d => y(d.value))
         .attr("height", d => y(0) - y(d.value))
-        .attr("width", x.bandwidth())
-        .attr("fill", "#4caf50");
-
+        .attr("rx", 6);  // Rounded corners
+  
+      // X Axis
       svg.append("g")
         .attr("transform", `translate(0,${height - margin.bottom})`)
         .call(d3.axisBottom(x));
-
+  
+      // Y Axis
       svg.append("g")
         .attr("transform", `translate(${margin.left},0)`)
-        .call(d3.axisLeft(y));
+        .call(d3.axisLeft(y).ticks(5));
+  
+      // Labels above bars
+      svg.selectAll(".label")
+        .data(data)
+        .enter()
+        .append("text")
+        .attr("x", d => x(d.label) + x.bandwidth() / 2)
+        .attr("y", d => y(d.value) - 10)
+        .attr("text-anchor", "middle")
+        .attr("fill", "#333")
+        .style("font-size", "14px")
+        .text(d => `₹${d.value}`);
     }
   }, [comparison]);
 

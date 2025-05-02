@@ -103,3 +103,29 @@
     color: #666;
   }
   
+
+  .pagination {
+    margin-top: 1rem;
+    display: flex;
+    gap: 0.5rem;
+    justify-content: center;
+  }
+  
+  .pagination button {
+    padding: 6px 12px;
+    border: none;
+    background-color: #eee;
+    cursor: pointer;
+    border-radius: 4px;
+    font-weight: bold;
+  }
+  
+  .pagination button:hover {
+    background-color: #ccc;
+  }
+  
+  .pagination .active-page {
+    background-color: #007bff;
+    color: white;
+  }
+  
